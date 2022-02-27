@@ -15,11 +15,12 @@ from T2_P3_KNNModel import KNNModel
 # adjust these as you try to find the best fit for each classifier.
 
 # Logistic Regression hyperparameters
-eta = 0.1 # Learning rate
-lam = 0.1 # Lambda for regularization
+eta = 0.001# Learning rate
+lam = 0.001 # Lambda for regularization
+
 
 # Whether or not you want the plots to be displayed
-show_charts = True
+show_charts = False
 
 
 # DO NOT CHANGE ANYTHING BELOW THIS LINE!
@@ -125,7 +126,7 @@ print('magnitude 6 and temperature 2: {}\n'.format(y_nb1[0]))
 print('Test star type predictions for Shared Covariance Gaussian Model:')
 print('magnitude 6 and temperature 2: {}\n'.format(y_nb2[0]))
 
-print('Test star type predictions for Linear Regression:')
+print('Test star type predictions for Logistic Regression:')
 print('magnitude 6 and temperature 2: {}'.format(y_lr[0]))
 
 print('Test star type predictions for KNN Model with k=1:')

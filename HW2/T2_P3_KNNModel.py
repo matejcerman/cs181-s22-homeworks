@@ -1,5 +1,6 @@
+from tkinter import X
 import numpy as np
-
+from scipy import stats
 # Please implement the predict() method of this class
 # You can add additional private methods by beginning them with
 # two underscores. It may look like the __dummyPrivateMethod below. You can feel
@@ -18,13 +19,14 @@ class KNNModel:
 
     # TODO: Implement this method!
     def predict(self, X_pred):
-        # The code in this method should be removed and replaced! We included it
-        # just so that the distribution code is runnable and produces a
-        # (currently meaningless) visualization.
         preds = []
         for x in X_pred:
-            z = np.cos(x ** 2).sum()
-            preds.append(1 + np.sign(z) * (np.abs(z) > 0.3))
+            dists = []
+            for i in range(self.X.shape[0]):
+                dists.append(((self.X[i,0] - x[0])/3)**2 + (self.X[i,1]- x[1])**2)
+            small_ind = np.argsort(dists)
+            lablist = self.y[small_ind][:self.K]
+            preds.append(stats.mode(lablist, axis=None)[0])
         return np.array(preds)
 
     # In KNN, "fitting" can be as simple as storing the data, so this has been written for you
