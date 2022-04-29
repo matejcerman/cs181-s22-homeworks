@@ -4,10 +4,10 @@ import numpy.random as npr
 import pygame as pg
 
 # uncomment this for animation
-# from SwingyMonkey import SwingyMonkey
+from SwingyMonkey import SwingyMonkey
 
 # uncomment this for no animation
-from SwingyMonkeyNoAnimation import SwingyMonkey
+#from SwingyMonkeyNoAnimation import SwingyMonkey
 
 
 X_BINSIZE = 200
@@ -29,6 +29,7 @@ class Learner(object):
         # We initialize our Q-value grid that has an entry for each action and state.
         # (action, rel_x, rel_y)
         self.Q = np.zeros((2, X_SCREEN // X_BINSIZE, Y_SCREEN // Y_BINSIZE))
+        self.epsilon = 0.5
 
     def reset(self):
         self.last_state = None
@@ -57,11 +58,34 @@ class Learner(object):
         # 2. Perform the Q-Learning update using 'current state' and the 'last state'.
         # 3. Choose the next action using an epsilon-greedy policy.
 
-        new_action = npr.rand() < 0.1
         new_state = state
+
+        alpha = 0.1
+        gamma = 0.9
+        epsilon = self.epsilon
+
+        current_state = self.discretize_state(state)
+        cx = current_state[0]
+        cy = current_state[1]
+        if (self.last_state is None):
+            if npr.rand() >= epsilon:
+                new_action = np.argmax([self.Q[0,cx,cy], self.Q[1,cx,cy]])
+            else:
+                new_action = int((npr.rand() > 0.5))
+        else:
+            last_state = self.discretize_state(self.last_state)
+            lx = last_state[0]
+            ly = last_state[1]
+            self.Q[int(self.last_action),lx,ly] += alpha * (self.last_reward + gamma*np.max([self.Q[0,cx,cy], self.Q[1,cx,cy]]) - self.Q[int(self.last_action),lx,ly])
+            if npr.rand() >= epsilon:
+                new_action = np.argmax([self.Q[0,cx,cy], self.Q[1,cx,cy]])
+            else:
+                new_action = int((npr.rand() > 0.5))
 
         self.last_action = new_action
         self.last_state = new_state
+
+        self.epsilon = self.epsilon * 0.8
 
         return self.last_action
 
