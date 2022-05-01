@@ -4,10 +4,10 @@ import numpy.random as npr
 import pygame as pg
 
 # uncomment this for animation
-from SwingyMonkey import SwingyMonkey
+#from SwingyMonkey import SwingyMonkey
 
 # uncomment this for no animation
-#from SwingyMonkeyNoAnimation import SwingyMonkey
+from SwingyMonkeyNoAnimation import SwingyMonkey
 
 
 X_BINSIZE = 200
@@ -85,7 +85,7 @@ class Learner(object):
         self.last_action = new_action
         self.last_state = new_state
 
-        self.epsilon = self.epsilon * 0.8
+        self.epsilon = self.epsilon * 0.7
 
         return self.last_action
 
@@ -129,7 +129,7 @@ if __name__ == '__main__':
 
     # Run games. You can update t_len to be smaller to run it faster.
     run_games(agent, hist, 100, 100)
-    print(hist)
+    print(np.median(hist), np.mean(hist), np.max(hist))
 
     # Save history. 
     np.save('hist', np.array(hist))
